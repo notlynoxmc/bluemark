@@ -2,6 +2,7 @@ package dev.bluemark.mixin;
 
 import dev.bluemark.BlueMarkClient;
 import dev.bluemark.BlueMarkConfig;
+import dev.bluemark.MarkSync;
 import dev.bluemark.NameDecorator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
@@ -10,7 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-/** Icon in front of your name inside chat messages (player chat + system messages). */
+/** Icons in front of names inside chat messages (player chat + system messages). */
 @Mixin(value = ChatComponent.class, remap = false)
 public abstract class ChatComponentMixin {
 
@@ -21,7 +22,8 @@ public abstract class ChatComponentMixin {
         BlueMarkConfig cfg = BlueMarkConfig.get();
         if (!cfg.enabled || !cfg.showInChat) return message;
 
-        Component decorated = NameDecorator.decorate(message, Minecraft.getInstance().getUser().getName(), cfg);
+        Component decorated = NameDecorator.decorate(message, Minecraft.getInstance().getUser().getName(), cfg.mark());
+        if (cfg.showOthers) decorated = MarkSync.decorateOthers(decorated);
         if (decorated != message) {
             BlueMarkClient.hit("chat");
         }

@@ -2,6 +2,7 @@ package dev.bluemark.mixin;
 
 import dev.bluemark.BlueMarkClient;
 import dev.bluemark.BlueMarkConfig;
+import dev.bluemark.MarkSync;
 import dev.bluemark.NameDecorator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
@@ -12,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/** Icon in the Tab player list (only your own name). */
+/** Icons in the Tab player list: yours and other BlueMark users'. */
 @Mixin(value = PlayerTabOverlay.class, remap = false)
 public abstract class PlayerTabOverlayMixin {
 
@@ -22,7 +23,8 @@ public abstract class PlayerTabOverlayMixin {
         if (!cfg.enabled || !cfg.showInTab) return;
 
         Component original = cir.getReturnValue();
-        Component decorated = NameDecorator.decorate(original, Minecraft.getInstance().getUser().getName(), cfg);
+        Component decorated = NameDecorator.decorate(original, Minecraft.getInstance().getUser().getName(), cfg.mark());
+        if (cfg.showOthers) decorated = MarkSync.decorateOthers(decorated);
         if (decorated != original) {
             BlueMarkClient.hit("tab-list");
             cir.setReturnValue(decorated);

@@ -14,6 +14,7 @@ public class BlueMarkClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         BlueMarkConfig.get();
+        MarkSync.start();
         LOGGER.info("BlueMark loaded. Settings: config/bluemark.json or Mod Menu.");
     }
 

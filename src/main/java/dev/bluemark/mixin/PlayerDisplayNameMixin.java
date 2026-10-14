@@ -2,6 +2,8 @@ package dev.bluemark.mixin;
 
 import dev.bluemark.BlueMarkClient;
 import dev.bluemark.BlueMarkConfig;
+import dev.bluemark.Mark;
+import dev.bluemark.MarkSync;
 import dev.bluemark.NameDecorator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -11,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/** Nametag above the head (and anything else that uses the player's display name). */
+/** Nametag above the head: your own icon, and the icons of other BlueMark users. */
 @Mixin(value = Player.class, remap = false)
 public abstract class PlayerDisplayNameMixin {
 
@@ -23,12 +25,20 @@ public abstract class PlayerDisplayNameMixin {
         Player self = (Player) (Object) this;
         String myName = Minecraft.getInstance().getUser().getName();
         boolean me = self.getName().getString().equals(myName);
-        if (!me && !cfg.allPlayers) return;
+
+        Mark mark;
+        if (me) {
+            mark = cfg.mark();
+        } else {
+            if (!cfg.showOthers) return;
+            mark = MarkSync.markFor(self.getUUID());
+            if (mark == null) return;
+        }
 
         Component original = cir.getReturnValue();
-        if (original == null || original.getString().startsWith(cfg.glyph())) return;
+        if (original == null || original.getString().startsWith(mark.glyph())) return;
 
-        BlueMarkClient.hit("nametag");
-        cir.setReturnValue(Component.empty().append(NameDecorator.icon(cfg)).append(original));
+        BlueMarkClient.hit(me ? "nametag" : "nametag-others");
+        cir.setReturnValue(Component.empty().append(NameDecorator.icon(mark)).append(original));
     }
 }

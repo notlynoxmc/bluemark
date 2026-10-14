@@ -3,7 +3,8 @@
   "id": "bluemark",
   "version": "${version}",
   "name": "BlueMark",
-  "description": "A customizable icon in front of your name: nametag, chat and tab list.",
+  "icon": "assets/bluemark/icon.png",
+  "description": "A customizable icon in front of your name (nametag, chat, tab list) that other BlueMark users can see too.",
   "environment": "client",
   "entrypoints": {
     "client": ["dev.bluemark.BlueMarkClient"],

@@ -7,6 +7,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Settings live in  .minecraft/config/bluemark.json
@@ -23,16 +24,26 @@ public final class BlueMarkConfig {
 
     // ---- values stored in the JSON file ----
     public boolean enabled = true;
-    /** Icon above the heads of OTHER players too (only on your screen). */
-    public boolean allPlayers = false;
     public String color = "#1D6AFF";
-    public String icon = "cross";
+    public String icon = "bolt";
     /** Icon in the nametag above heads. */
     public boolean showOnNametag = true;
     /** Show your own nametag (visible in third person, F5). */
     public boolean showOwnNametag = true;
     public boolean showInChat = true;
     public boolean showInTab = true;
+
+    // ---- online sharing (needs a BlueMark server, see server/README.md) ----
+    /** Base URL of the BlueMark sharing server, e.g. https://bluemark.example.workers.dev */
+    public String serverUrl = "";
+    /** Upload my icon so other BlueMark users can see it. */
+    public boolean shareMark = true;
+    /** Show the icons other BlueMark users picked. */
+    public boolean showOthers = true;
+    /** Random secret that proves to the server that updates for my UUID come from me. Keep it private. */
+    public String secret = "";
+    /** True while the server holds my icon (so it can be removed when sharing is turned off). */
+    public boolean sharedOnServer = false;
 
     // ---- cache ----
     private static BlueMarkConfig cached = new BlueMarkConfig();
@@ -74,11 +85,25 @@ public final class BlueMarkConfig {
         }
     }
 
+    /** Index of an icon name in {@link #ICONS} (0 if unknown). */
+    public static int iconIndex(String name) {
+        int i = name == null ? 0 : ICONS.indexOf(name.toLowerCase(Locale.ROOT).trim());
+        return Math.max(i, 0);
+    }
+
     /** The private-use character that the font maps to the chosen icon. */
     public String glyph() {
-        int i = icon == null ? 0 : ICONS.indexOf(icon.toLowerCase().trim());
-        if (i < 0) i = 0;
-        return String.valueOf((char) (0xE000 + i));
+        return mark().glyph();
+    }
+
+    /** Icon name normalized to one of {@link #ICONS}. */
+    public String iconName() {
+        return ICONS.get(iconIndex(icon));
+    }
+
+    /** My own mark (icon + color). */
+    public Mark mark() {
+        return new Mark(iconName(), rgb());
     }
 
     /** "#RRGGBB" -> int. Falls back to blue if the text is not a valid color. */

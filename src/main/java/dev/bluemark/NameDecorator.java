@@ -13,9 +13,9 @@ public final class NameDecorator {
     private NameDecorator() {}
 
     /** The colored icon (followed by a space). */
-    public static MutableComponent icon(BlueMarkConfig cfg) {
-        return Component.literal(cfg.glyph() + " ")
-                .withStyle(Style.EMPTY.withColor(TextColor.fromRgb(cfg.rgb())));
+    public static MutableComponent icon(Mark mark) {
+        return Component.literal(mark.glyph() + " ")
+                .withStyle(Style.EMPTY.withColor(TextColor.fromRgb(mark.rgb())));
     }
 
     /**
@@ -23,13 +23,14 @@ public final class NameDecorator {
      * (as a whole word) has the icon in front of it. If the name is not there,
      * the same object is returned. Never adds the icon twice.
      */
-    public static Component decorate(Component input, String name, BlueMarkConfig cfg) {
-        if (input == null || name == null || name.isEmpty()) return input;
+    public static Component decorate(Component input, String name, Mark mark) {
+        if (input == null || name == null || name.isEmpty() || mark == null) return input;
+        if (!input.getString().contains(name)) return input; // cheap check before the regex
 
         Pattern p = Pattern.compile("(?<![A-Za-z0-9_])" + Pattern.quote(name) + "(?![A-Za-z0-9_])");
         if (!p.matcher(input.getString()).find()) return input;
 
-        String prefix = cfg.glyph() + " ";
+        String prefix = mark.glyph() + " ";
         MutableComponent out = Component.empty();
         StringBuilder sofar = new StringBuilder();
 
@@ -42,7 +43,7 @@ public final class NameDecorator {
                 if (!before.isEmpty()) out.append(Component.literal(before).withStyle(style));
 
                 if (!sofar.toString().endsWith(prefix)) {
-                    out.append(icon(cfg));
+                    out.append(icon(mark));
                     sofar.append(prefix);
                 }
                 out.append(Component.literal(m.group()).withStyle(style));
