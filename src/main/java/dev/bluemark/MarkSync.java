@@ -125,8 +125,7 @@ public final class MarkSync {
 
         String base = baseUrl(cfg);
         if (base == null) {
-            status = cfg.serverUrl == null || cfg.serverUrl.isBlank()
-                    ? "No server URL set" : "Invalid URL (use http:// or https://)";
+            status = "Sharing server not set up";
             byName = Map.of();
             return;
         }
@@ -194,8 +193,8 @@ public final class MarkSync {
     // ------------------------------------------------------------------ network
 
     private static String baseUrl(BlueMarkConfig cfg) {
-        if (cfg.serverUrl == null) return null;
-        String u = cfg.serverUrl.trim();
+        String u = (cfg.serverUrl == null || cfg.serverUrl.isBlank()
+                ? BlueMarkConfig.DEFAULT_SERVER_URL : cfg.serverUrl).trim();
         while (u.endsWith("/")) u = u.substring(0, u.length() - 1);
         if (!(u.startsWith("http://") || u.startsWith("https://")) || u.length() < 10) return null;
         return u;

@@ -34,7 +34,13 @@ public final class BlueMarkConfig {
     public boolean showInTab = true;
 
     // ---- online sharing (needs a BlueMark server, see server/README.md) ----
-    /** Base URL of the BlueMark sharing server, e.g. https://bluemark.example.workers.dev */
+    /**
+     * The sharing server every copy of the mod talks to. Put the address of YOUR deployed server here
+     * (e.g. "https://bluemark.yourname.workers.dev") before building, so all players use the same one.
+     */
+    public static final String DEFAULT_SERVER_URL = "";
+
+    /** Optional override in config/bluemark.json (not shown in the settings screen). Empty = DEFAULT_SERVER_URL. */
     public String serverUrl = "";
     /** Upload my icon so other BlueMark users can see it. */
     public boolean shareMark = true;

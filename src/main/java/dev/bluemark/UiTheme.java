@@ -31,15 +31,22 @@ final class UiTheme {
         return mx >= x1 && mx < x2 && my >= y1 && my < y2;
     }
 
-    /** Essential-style switch, 20x10: blue frame, dark half + blue half with a small "I" when on. */
-    static void toggle(GuiGraphicsExtractor g, int x, int y, boolean on) {
-        box(g, x, y, x + 20, y + 10, 0xFF0E0E0E, on ? BLUE : 0xFF5A5A5A);
-        if (on) {
-            g.fill(x + 10, y + 1, x + 19, y + 9, BLUE);
-            g.fill(x + 14, y + 3, x + 15, y + 7, 0xFFFFFFFF);
-        } else {
-            g.fill(x + 1, y + 1, x + 10, y + 9, 0xFF5A5A5A);
-        }
+    /** Blends two opaque colors: t = 0 gives a, t = 1 gives b. */
+    static int mix(int a, int b, float t) {
+        t = Math.max(0f, Math.min(1f, t));
+        int r = (int) (((a >> 16) & 255) * (1 - t) + ((b >> 16) & 255) * t);
+        int gr = (int) (((a >> 8) & 255) * (1 - t) + ((b >> 8) & 255) * t);
+        int bl = (int) ((a & 255) * (1 - t) + (b & 255) * t);
+        return 0xFF000000 | (r << 16) | (gr << 8) | bl;
+    }
+
+    /** Essential-style switch, 20x10. t = 0 (off) .. 1 (on): the block slides right and turns blue. */
+    static void toggle(GuiGraphicsExtractor g, int x, int y, float t) {
+        int col = mix(0xFF5A5A5A, BLUE, t);
+        box(g, x, y, x + 20, y + 10, 0xFF0E0E0E, col);
+        int kx = x + 1 + Math.round(9 * t);
+        g.fill(kx, y + 1, kx + 9, y + 9, col);
+        if (t > 0.5f) g.fill(kx + 4, y + 3, kx + 5, y + 7, 0xFFFFFFFF);
     }
 
     /** Small magnifier icon for the search box. */
