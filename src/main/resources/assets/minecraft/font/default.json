@@ -1,0 +1,67 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "bluemark:font/cross.png",
+      "ascent": 7,
+      "height": 7,
+      "chars": [
+        "\ue000"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "bluemark:font/heart.png",
+      "ascent": 7,
+      "height": 7,
+      "chars": [
+        "\ue001"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "bluemark:font/star.png",
+      "ascent": 7,
+      "height": 7,
+      "chars": [
+        "\ue002"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "bluemark:font/crown.png",
+      "ascent": 7,
+      "height": 7,
+      "chars": [
+        "\ue003"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "bluemark:font/diamond.png",
+      "ascent": 7,
+      "height": 7,
+      "chars": [
+        "\ue004"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "bluemark:font/bolt.png",
+      "ascent": 7,
+      "height": 7,
+      "chars": [
+        "\ue005"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "bluemark:font/custom.png",
+      "ascent": 7,
+      "height": 7,
+      "chars": [
+        "\ue006"
+      ]
+    }
+  ]
+}
