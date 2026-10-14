@@ -20,7 +20,7 @@ public abstract class LivingEntityRendererMixin {
         if (!cfg.enabled || !cfg.showOwnNametag || !cfg.showOnNametag) return;
 
         Minecraft mc = Minecraft.getInstance();
-        if (entity == mc.player && !mc.options.hideGui) {
+        if (entity == mc.player) {
             BlueMarkClient.hit("own-nametag");
             cir.setReturnValue(true);
         }
