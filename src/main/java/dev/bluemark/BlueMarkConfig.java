@@ -10,22 +10,29 @@ import java.util.List;
 
 /**
  * Settings live in  .minecraft/config/bluemark.json
- * The file is re-read automatically (about once per second), so edits apply
- * while the game is running - no restart needed.
+ * You can edit the file by hand (it is re-read about once per second)
+ * or use the settings screen in Mod Menu.
  */
 public final class BlueMarkConfig {
 
     /** Icon names, in the same order as the glyphs U+E000, U+E001, ... in font/default.json */
-    private static final List<String> ICONS =
+    public static final List<String> ICONS =
             List.of("cross", "heart", "star", "crown", "diamond", "bolt", "custom");
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     // ---- values stored in the JSON file ----
     public boolean enabled = true;
+    /** Icon above the heads of OTHER players too (only on your screen). */
     public boolean allPlayers = false;
     public String color = "#1D6AFF";
     public String icon = "cross";
+    /** Icon in the nametag above heads. */
+    public boolean showOnNametag = true;
+    /** Show your own nametag (visible in third person, F5). */
+    public boolean showOwnNametag = true;
+    public boolean showInChat = true;
+    public boolean showInTab = true;
 
     // ---- cache ----
     private static BlueMarkConfig cached = new BlueMarkConfig();
@@ -43,7 +50,7 @@ public final class BlueMarkConfig {
         try {
             Path p = file();
             if (!Files.exists(p)) {
-                Files.writeString(p, GSON.toJson(new BlueMarkConfig()));
+                Files.writeString(p, GSON.toJson(cached));
             }
             long mod = Files.getLastModifiedTime(p).toMillis();
             if (mod != lastModified) {
@@ -55,6 +62,16 @@ public final class BlueMarkConfig {
             // keep the previous values if the file is missing or has a typo
         }
         return cached;
+    }
+
+    /** Writes the current values to disk (used by the settings screen). */
+    public static synchronized void save() {
+        try {
+            Path p = file();
+            Files.writeString(p, GSON.toJson(cached));
+            lastModified = Files.getLastModifiedTime(p).toMillis();
+        } catch (Exception ignored) {
+        }
     }
 
     /** The private-use character that the font maps to the chosen icon. */

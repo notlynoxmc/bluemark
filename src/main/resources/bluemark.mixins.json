@@ -2,6 +2,11 @@
   "required": true,
   "package": "dev.bluemark.mixin",
   "compatibilityLevel": "JAVA_21",
-  "client": ["PlayerDisplayNameMixin"],
-  "injectors": { "defaultRequire": 1 }
+  "client": [
+    "PlayerDisplayNameMixin",
+    "LivingEntityRendererMixin",
+    "PlayerTabOverlayMixin",
+    "ChatComponentMixin"
+  ],
+  "injectors": { "defaultRequire": 0 }
 }

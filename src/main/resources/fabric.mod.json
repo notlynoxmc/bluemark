@@ -3,12 +3,19 @@
   "id": "bluemark",
   "version": "${version}",
   "name": "BlueMark",
-  "description": "A customizable icon in front of your name.",
+  "description": "A customizable icon in front of your name: nametag, chat and tab list.",
   "environment": "client",
+  "entrypoints": {
+    "client": ["dev.bluemark.BlueMarkClient"],
+    "modmenu": ["dev.bluemark.BlueMarkModMenu"]
+  },
   "mixins": ["bluemark.mixins.json"],
   "depends": {
     "fabricloader": ">=0.19.3",
     "minecraft": "~26.2",
     "java": ">=25"
+  },
+  "recommends": {
+    "modmenu": "*"
   }
 }

@@ -5,9 +5,15 @@ plugins {
 version = project.mod_version
 base { archivesName = 'bluemark' }
 
+repositories {
+    maven { url = 'https://maven.terraformersmc.com/' }
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    // Mod Menu is only needed to compile the settings-button entrypoint.
+    compileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 tasks.withType(JavaCompile).configureEach {
