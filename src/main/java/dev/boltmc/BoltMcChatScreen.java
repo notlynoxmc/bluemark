@@ -48,7 +48,7 @@ public class BoltMcChatScreen extends Screen {
     private void send() {
         String text = input.getValue().trim();
         if (text.isEmpty()) return;
-        ChatRelay.send(friend.uuid, text);
+        ChatRelay.send(friend.id, text);
         input.setValue("");
         scroll = 0;
     }
@@ -79,6 +79,7 @@ public class BoltMcChatScreen extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
         super.extractRenderState(g, mouseX, mouseY, delta);
+        ChatRelay.touch(); // while this chat is open the relay is checked every few seconds
 
         g.fill(0, 0, this.width, this.height, UiTheme.BG);
         UiTheme.box(g, px1, py1, px2, py2, UiTheme.PANEL, UiTheme.LINE);
@@ -93,7 +94,7 @@ public class BoltMcChatScreen extends Screen {
 
         int msgTop = py1 + 32;
         int msgBottom = py2 - 38;
-        List<ChatMessage> msgs = ChatRelay.historyWith(friend.uuid);
+        List<ChatMessage> msgs = ChatRelay.historyWith(friend.id);
 
         List<String> lines = new ArrayList<>();
         List<Boolean> mine = new ArrayList<>();

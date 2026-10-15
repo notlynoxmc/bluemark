@@ -11,7 +11,6 @@ import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Settings live in  .minecraft/config/boltmc.json
@@ -51,10 +50,10 @@ public final class BoltMcConfig {
     public List<Friend> friends = new ArrayList<>();
 
     public static final class Friend {
-        public String name;
-        public String uuid; // no dashes
+        public String name; // as typed
+        public String id;   // lowercase name - the key used by the relay (works for original and cracked accounts)
         public Friend() {}
-        public Friend(String name, String uuid) { this.name = name; this.uuid = uuid; }
+        public Friend(String name, String id) { this.name = name; this.id = id; }
     }
 
     // ---- cache ----
@@ -85,6 +84,7 @@ public final class BoltMcConfig {
                         loaded.cosmetics.computeIfAbsent(c.name(), k -> new CosmeticState(false, c.defaultColor));
                     }
                     if (loaded.friends == null) loaded.friends = new ArrayList<>();
+                    loaded.friends.removeIf(f -> f == null || f.id == null || f.name == null);
                     cached = loaded;
                 }
             }
@@ -123,7 +123,4 @@ public final class BoltMcConfig {
         }
     }
 
-    public String plainMyUuid(UUID id) {
-        return id.toString().replace("-", "");
-    }
 }

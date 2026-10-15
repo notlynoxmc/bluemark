@@ -164,7 +164,7 @@ public class BoltMcScreen extends Screen {
             case OK -> "Added " + name + ".";
             case ALREADY_FRIENDS -> name + " is already a friend.";
             case IS_YOU -> "That's you!";
-            case NOT_FOUND -> name + " isn't online with you right now.";
+            case INVALID -> "Names are 1-16 letters, numbers or _ .";
         };
         noticeUntil = System.currentTimeMillis() + 3000;
         if (r == FriendsManager.AddResult.OK) {
@@ -445,7 +445,7 @@ public class BoltMcScreen extends Screen {
 
     private void drawAddFriend(GuiGraphicsExtractor g, Item it) {
         UiTheme.box(g, cx1, it.y, cx2, it.y + it.h, UiTheme.CARD, UiTheme.BORDER);
-        label(g, "Type a name of a player you're online with, then press Add.", cx1 + 10, it.y + 5, UiTheme.SUB);
+        label(g, "Type a player's name (original or cracked), then press Add.", cx1 + 10, it.y + 5, UiTheme.SUB);
         int fx1 = cx1 + 10, fx2 = cx2 - 76, fy = it.y + 18;
         UiTheme.box(g, fx1, fy, fx2, fy + 16, UiTheme.FIELD, addFriendBox.isFocused() ? UiTheme.BLUE : UiTheme.BORDER);
         String v = addFriendBox.getValue();
@@ -457,7 +457,7 @@ public class BoltMcScreen extends Screen {
     }
 
     private void drawFriend(GuiGraphicsExtractor g, Item it, int mx, int my) {
-        card(g, "friend:" + it.friend.uuid, cx1, it.y, cx2 - 22, it.y + it.h, mx, my);
+        card(g, "friend:" + it.friend.id, cx1, it.y, cx2 - 22, it.y + it.h, mx, my);
         label(g, it.friend.name, cx1 + 8, it.y + 5, UiTheme.TEXT);
         boolean overRemove = UiTheme.inside(mx, my, cx2 - 18, it.y, cx2, it.y + it.h);
         UiTheme.box(g, cx2 - 18, it.y, cx2, it.y + it.h, overRemove ? 0xFFFFE3E3 : UiTheme.CARD,
