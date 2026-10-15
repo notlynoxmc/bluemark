@@ -6,6 +6,8 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -52,12 +54,22 @@ public class BoltMcChatScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(KeyEvent event) {
+        int keyCode = event.key();
         if (keyCode == 257 || keyCode == 335) { // Enter / numpad Enter
             send();
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(event);
+    }
+
+    private static String plain(FormattedCharSequence seq) {
+        StringBuilder sb = new StringBuilder();
+        seq.accept((index, style, codePoint) -> {
+            sb.appendCodePoint(codePoint);
+            return true;
+        });
+        return sb.toString();
     }
 
     private void label(GuiGraphicsExtractor g, String s, int x, int y, int color) {
@@ -87,8 +99,8 @@ public class BoltMcChatScreen extends Screen {
         List<Boolean> mine = new ArrayList<>();
         int wrapW = px2 - px1 - 40;
         for (ChatMessage m : msgs) {
-            for (String l : this.font.split(Component.literal(m.text()), wrapW)) {
-                lines.add(l.toString());
+            for (FormattedCharSequence l : this.font.split(Component.literal(m.text()), wrapW)) {
+                lines.add(plain(l));
                 mine.add(m.mine());
             }
         }

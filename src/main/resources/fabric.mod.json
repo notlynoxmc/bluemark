@@ -4,13 +4,16 @@
   "version": "${version}",
   "name": "Bolt Mc",
   "icon": "assets/boltmc/icon.png",
-  "description": "Recolorable cosmetics (wings, cape, hat, particle aura) and a simple friends chat.",
+  "description": "Recolorable particle aura and a simple friends chat.",
   "environment": "client",
   "entrypoints": {
-    "client": ["dev.boltmc.BoltMcClient"],
-    "modmenu": ["dev.boltmc.BoltMcModMenu"]
+    "client": [
+      "dev.boltmc.BoltMcClient"
+    ],
+    "modmenu": [
+      "dev.boltmc.BoltMcModMenu"
+    ]
   },
-  "mixins": ["boltmc.mixins.json"],
   "depends": {
     "fabricloader": ">=0.19.3",
     "minecraft": "~26.2",

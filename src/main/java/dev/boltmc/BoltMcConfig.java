@@ -36,7 +36,7 @@ public final class BoltMcConfig {
     private static Map<String, CosmeticState> defaultCosmetics() {
         Map<String, CosmeticState> m = new LinkedHashMap<>();
         for (Cosmetic c : Cosmetic.values()) {
-            m.put(c.name(), new CosmeticState(c == Cosmetic.WINGS, c.defaultColor));
+            m.put(c.name(), new CosmeticState(c == Cosmetic.AURA, c.defaultColor));
         }
         return m;
     }
