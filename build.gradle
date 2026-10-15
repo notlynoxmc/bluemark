@@ -3,7 +3,7 @@ plugins {
 }
 
 version = project.mod_version
-base { archivesName = 'bluemark' }
+base { archivesName = 'boltmc' }
 
 repositories {
     maven { url = 'https://maven.terraformersmc.com/' }

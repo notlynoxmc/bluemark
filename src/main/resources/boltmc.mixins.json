@@ -1,0 +1,9 @@
+{
+  "required": true,
+  "package": "dev.boltmc.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "PlayerRendererMixin"
+  ],
+  "injectors": { "defaultRequire": 0 }
+}
